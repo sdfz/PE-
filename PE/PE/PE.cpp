@@ -6,22 +6,22 @@
 #include<iostream>
 using namespace std;
 
-//DOSÍ·
+//DOSå¤´
 PIMAGE_DOS_HEADER pDosHeader = NULL;
-//NTÍ·
+//NTå¤´
 PIMAGE_NT_HEADERS pNTHeader = NULL;
-//±ê×¼PEÍ·
+//æ ‡å‡†PEå¤´
 PIMAGE_FILE_HEADER pPEHeader = NULL;
-//¿ÉÑ¡PEÍ·
+//å¯é€‰PEå¤´
 PIMAGE_OPTIONAL_HEADER32 pOptionHeader = NULL;
-//½Ú±í
+//èŠ‚è¡¨
 PIMAGE_SECTION_HEADER pSectionHeader = NULL;
-//½ÚµÄ×ø±ê
+//èŠ‚è¡¨çš„åæ ‡
 int pSectionH[5];
 
 char* read()
 {
-	FILE* fp = fopen("C:\\Users\\geer\\Desktop\\color.exe", "rb");
+	FILE* fp = fopen("C:\\Users\\å‘¨æ³¢\\Desktop\\color.exe", "rb");
 	if (fp == NULL)
 	{
 		printf("File open failed.\n");
@@ -43,7 +43,7 @@ char* read()
 		exit(1);
 	}
 
-	//Êı¾İ´¦Àí
+	//æ•°æ®å¤„ç†
 	fread(buffer, sizeof(char), flen, fp);
 	//fwrite(buffer,sizeof(char),flen,fp);
 	fclose(fp);
@@ -62,45 +62,45 @@ char* PrintNTHeaders(char* rfile)
 	pFileBuffer = rfile;
 	if (!pFileBuffer)
 	{
-		printf("ÎÄ¼ş¶ÁÈ¡Ê§°Ü\n");
+		printf("æ–‡ä»¶è¯»å–å¤±è´¥\n");
 		return 0;
 	}
 
-	//ÅĞ¶ÏÊÇ·ñÊÇÓĞĞ§µÄMZ±êÖ¾	
+	//åˆ¤æ–­æ˜¯å¦æ˜¯æœ‰æ•ˆçš„MZæ ‡å¿—	
 	if (*((PWORD)pFileBuffer) != IMAGE_DOS_SIGNATURE)
 	{
-		printf("²»ÊÇÓĞĞ§µÄMZ±êÖ¾\n");
+		printf("ä¸æ˜¯æœ‰æ•ˆçš„MZæ ‡å¿—\n");
 		free(pFileBuffer);
 		return 0;
 	}
 
 	pDosHeader = (PIMAGE_DOS_HEADER)pFileBuffer;
-	//´òÓ¡DOCÍ·	
-	printf("********************	DOCÍ·	********************\n");
-	printf("MZ±êÖ¾£º%x\n", pDosHeader->e_magic);
-	printf("PEÆ«ÒÆ£º%x\n", pDosHeader->e_lfanew);
-	//ÅĞ¶ÏÊÇ·ñÊÇÓĞĞ§µÄPE±êÖ¾	
+	//æ‰“å°DOCå¤´	
+	printf("********************	DOCå¤´	********************\n");
+	printf("MZæ ‡å¿—ï¼š%x\n", pDosHeader->e_magic);
+	printf("PEåç§»ï¼š%x\n", pDosHeader->e_lfanew);
+	//åˆ¤æ–­æ˜¯å¦æ˜¯æœ‰æ•ˆçš„PEæ ‡å¿—	
 	if (*((PDWORD)((DWORD)pFileBuffer + pDosHeader->e_lfanew)) != IMAGE_NT_SIGNATURE)
 	{
-		printf("²»ÊÇÓĞĞ§µÄPE±êÖ¾\n");
+		printf("ä¸æ˜¯æœ‰æ•ˆçš„PEæ ‡å¿—\n");
 		free(pFileBuffer);
 		return 0;
 	}
 
 	pNTHeader = (PIMAGE_NT_HEADERS)(((int)pFileBuffer) + pDosHeader->e_lfanew);
-	//´òÓ¡NTÍ·	
-	printf("********************	NTÍ·	********************\n");
+	//æ‰“å°NTå¤´	
+	printf("********************	NTå¤´	********************\n");
 	printf("NT: %x\n", pNTHeader->Signature);
 	pPEHeader = (PIMAGE_FILE_HEADER)(((DWORD)pNTHeader) + 4);
 
-	printf("********************	±ê×¼PEÍ·	********************\n");
+	printf("********************	æ ‡å‡†PEå¤´	********************\n");
 	printf("PE: %x\n", pPEHeader->Machine);
-	printf("½ÚµÄÊıÁ¿: %x\n", pPEHeader->NumberOfSections);
+	printf("èŠ‚çš„æ•°é‡: %x\n", pPEHeader->NumberOfSections);
 	printf("SizeOfOptionalHeader: %x\n", pPEHeader->SizeOfOptionalHeader);
 	printf("Characteristics: %x\n", pPEHeader->Characteristics);
-	//¿ÉÑ¡PEÍ·	
+	//å¯é€‰PEå¤´	
 	pOptionHeader = (PIMAGE_OPTIONAL_HEADER32)((DWORD)pPEHeader + sizeof(IMAGE_FILE_HEADER));
-	printf("********************	OPTIOIN_PEÍ·	********************\n");
+	printf("********************	OPTIOIN_PEå¤´	********************\n");
 	printf("OPTION_PE:%x\n", pOptionHeader->Magic);
 	printf("SizeOfCode:%x\n", pOptionHeader->SizeOfCode);
 	printf("SizeOfInitializedData:%x\n", pOptionHeader->SizeOfInitializedData);
@@ -120,13 +120,13 @@ char* PrintNTHeaders(char* rfile)
 	printf("SizeOfHeapCommit:%x\n", pOptionHeader->SizeOfHeapCommit);
 	printf("LoaderFlags:%x\n", pOptionHeader->LoaderFlags);
 
-	//PE ½Ú±í
-	printf("********************	PE½Ú±í	********************\n");
+	//PE èŠ‚è¡¨
+	printf("********************	PEèŠ‚è¡¨	********************\n");
 	char sectionName[9] = { 0 };
 
 	pSectionHeader = (PIMAGE_SECTION_HEADER)((DWORD)pOptionHeader + sizeof(IMAGE_OPTIONAL_HEADER32));
 
-	
+
 	for (int k = 0; k < pPEHeader->NumberOfSections; k++, pSectionHeader++)
 	{
 		memcpy(sectionName, pSectionHeader->Name, 8);
@@ -145,12 +145,12 @@ char* PrintNTHeaders(char* rfile)
 		printf("\n");
 	}
 
-	//Êä³öÃ¿¸ö½ÚµÄdata
+	//è¾“å‡ºæ¯ä¸ªèŠ‚çš„data
 	//unsigned int Pointdata = 0;
 	//char PointRawData[5632] = { 0 };
 
 	//PIMAGE_SECTION_HEADER p123 = (PIMAGE_SECTION_HEADER)pSectionH[0];
-	//Pointdata = p123->SizeOfRawData;//16½øÖÆ×ª»»³É10½øÖÆ
+	//Pointdata = p123->SizeOfRawData;//16è¿›åˆ¶è½¬æ¢æˆ10è¿›åˆ¶
 	//memcpy(PointRawData, (char*)((int)pFileBuffer + p123->PointerToRawData), Pointdata);
 
 	//for (unsigned int i = 0; i < Pointdata; i++)
@@ -164,7 +164,7 @@ char* PrintNTHeaders(char* rfile)
 
 
 
-	//ÊÍ·ÅÄÚ´æ	
+	//é‡Šæ”¾å†…å­˜	
 	//free(pFileBuffer);
 
 	return pFileBuffer;
@@ -175,37 +175,37 @@ char* PrintNTHeaders(char* rfile)
 char* ImageBuffer(char** rFile)
 {
 
-	////DOSÍ·
+	////DOSå¤´
 	//PIMAGE_DOS_HEADER pDosHeader = NULL;
-	////NTÍ·
+	////NTå¤´
 	//PIMAGE_NT_HEADERS pNTHeader = NULL;
-	////±ê×¼PEÍ·
+	////æ ‡å‡†PEå¤´
 	//PIMAGE_FILE_HEADER pPEHeader = NULL;
-	////¿ÉÑ¡PEÍ·
+	////å¯é€‰PEå¤´
 	//PIMAGE_OPTIONAL_HEADER32 pOptionHeader = NULL;
-	////½Ú±í
+	////èŠ‚è¡¨
 	//PIMAGE_SECTION_HEADER pSectionHeader = NULL;
 	//int pSectionH[6];
 
-	int imgdadaxiao = pOptionHeader->SizeOfImage;//Õû¸öimg´óĞ¡
-	int headxdaxiao = pOptionHeader->SizeOfHeaders;//Í·¶ÔÆëºóµÄ´óĞ¡
+	int imgdadaxiao = pOptionHeader->SizeOfImage;//æ•´ä¸ªimgå¤§å°
+	int headxdaxiao = pOptionHeader->SizeOfHeaders;//å¤´å¯¹é½åçš„å¤§å°
 
 	char* imgbuffer = (char*)malloc(sizeof(char) * imgdadaxiao + 1);
 	memset(imgbuffer, 0, imgdadaxiao + 1);
-	
+
 	memcpy(imgbuffer, *rFile, headxdaxiao);
 
-	for (int i = 0; i < 5;i++)
+	for (int i = 0; i < pPEHeader->NumberOfSections; i++)
 	{
-		//ÎÄ¼şÖĞµÚÒ»¸ö½Ú±íÎ»ÖÃÆ«ÒÆµØÖ·
-		PIMAGE_SECTION_HEADER jie1 = (PIMAGE_SECTION_HEADER)pSectionH[i];		
-		int imgadd = jie1->VirtualAddress;//ÄÚ´æÖĞµÚÒ»¸ö½ÚÎ»ÖÃÆ«ÒÆµØÖ·
-		int filewx = jie1->PointerToRawData; //ÎÄ¼şÎ»ÖÃ¿ªÊ¼¸´ÖÆ
-		unsigned int jiedaxiao = jie1->SizeOfRawData;//ÎÄ¼şÎ»ÖÃµÄ´óĞ¡
+		//æ–‡ä»¶ä¸­ç¬¬ä¸€ä¸ªèŠ‚è¡¨ä½ç½®åç§»åœ°å€
+		PIMAGE_SECTION_HEADER jie1 = (PIMAGE_SECTION_HEADER)pSectionH[i];
+		int imgadd = jie1->VirtualAddress;//å†…å­˜ä¸­ç¬¬ä¸€ä¸ªèŠ‚ä½ç½®åç§»åœ°å€
+		int filewx = jie1->PointerToRawData; //æ–‡ä»¶ä½ç½®å¼€å§‹å¤åˆ¶
+		unsigned int jiedaxiao = jie1->SizeOfRawData;//æ–‡ä»¶ä½ç½®çš„å¤§å°
 
-		memcpy( imgbuffer + imgadd, (char*)((int)* rFile + filewx), jiedaxiao);
-		
-		//ÅĞ¶ÏMisc.VirtualSize > SizeOfRawData£¬> ÔòÓÃËûÃÇÖ®¼äµÄ²îÖµ×·¼Óµ½headxdaxiaoºóÃæ
+		memcpy(imgbuffer + imgadd, (char*)((int)* rFile + filewx), jiedaxiao);
+
+		//åˆ¤æ–­Misc.VirtualSize > SizeOfRawDataï¼Œ> åˆ™ç”¨ä»–ä»¬ä¹‹é—´çš„å·®å€¼è¿½åŠ åˆ°headxdaxiaoåé¢
 		if (jie1->Misc.VirtualSize > jie1->SizeOfRawData)
 		{
 			int jie = jie1->Misc.VirtualSize - jie1->SizeOfRawData;
@@ -217,9 +217,9 @@ char* ImageBuffer(char** rFile)
 }
 
 int daxiao123;
-char* NewBuffer(char* imgFile,char* rFile)
+char* NewBuffer(char* imgFile, char* rFile)
 {
-	//¼ÆËãÕû¸öÎÄ¼ş´óĞ¡£¬ÓÃ×îºóÒ»¸ö½Ú+¶ÔÆë
+	//è®¡ç®—æ•´ä¸ªæ–‡ä»¶å¤§å°ï¼Œç”¨æœ€åä¸€ä¸ªèŠ‚+å¯¹é½
 	PIMAGE_SECTION_HEADER NewpSectionHeader = NULL;
 	NewpSectionHeader = (PIMAGE_SECTION_HEADER)pSectionH[4];
 	int daxiao123 = ((int)NewpSectionHeader->PointerToRawData + (int)NewpSectionHeader->SizeOfRawData);
@@ -227,18 +227,18 @@ char* NewBuffer(char* imgFile,char* rFile)
 	char* Newf = (char*)malloc(sizeof(char) * daxiao123 + 1);
 	memset(Newf, 0, daxiao123 + 1);
 
-	//»ñÈ¡file and imgÎÄ¼şÍ·µÄ´óĞ¡£¬Head²¿·Ö¶¼Ò»Ñù
-	int headxdaxiao = pOptionHeader->SizeOfHeaders;//Í·¶ÔÆëºóµÄ´óĞ¡
+	//è·å–file and imgæ–‡ä»¶å¤´çš„å¤§å°ï¼ŒHeadéƒ¨åˆ†éƒ½ä¸€æ ·
+	int headxdaxiao = pOptionHeader->SizeOfHeaders;//å¤´å¯¹é½åçš„å¤§å°
 	memcpy(Newf, rFile, headxdaxiao);
 
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < pPEHeader->NumberOfSections; i++)
 	{
-		//ÎÄ¼şÖĞµÚÒ»¸ö½Ú±íÎ»ÖÃÆ«ÒÆµØÖ·
+		//æ–‡ä»¶ä¸­ç¬¬ä¸€ä¸ªèŠ‚è¡¨ä½ç½®åç§»åœ°å€
 		PIMAGE_SECTION_HEADER jie1 = (PIMAGE_SECTION_HEADER)pSectionH[i];
-		int imgadd = jie1->VirtualAddress;//ÄÚ´æÖĞµÚÒ»¸ö½ÚÎ»ÖÃÆ«ÒÆµØÖ·
-		int filewx = jie1->PointerToRawData; //ÎÄ¼şÎ»ÖÃ¿ªÊ¼¸´ÖÆ
-		unsigned int jiedaxiao = jie1->SizeOfRawData;//ÎÄ¼şÎ»ÖÃµÄ´óĞ¡
+		int imgadd = jie1->VirtualAddress;//å†…å­˜ä¸­ç¬¬ä¸€ä¸ªèŠ‚ä½ç½®åç§»åœ°å€
+		int filewx = jie1->PointerToRawData; //æ–‡ä»¶ä½ç½®å¼€å§‹å¤åˆ¶
+		unsigned int jiedaxiao = jie1->SizeOfRawData;//æ–‡ä»¶ä½ç½®çš„å¤§å°
 
 		memcpy((char*)Newf + filewx, (char*)((int)imgFile + imgadd), jiedaxiao);
 
@@ -253,17 +253,69 @@ char* NewBuffer(char* imgFile,char* rFile)
 void cunpan(char* file)
 {
 
-		FILE* fp = fopen("C:\\Users\\geer\\Desktop\\color2.exe", "wb");
-		if (fp == NULL)
+	FILE* fp = fopen("C:\\Users\\å‘¨æ³¢\\Desktop\\color2.exe", "wb");
+	if (fp == NULL)
+	{
+		printf("File open failed.\n");
+		exit(1);
+	}
+	fseek(fp, 0L, SEEK_SET);
+	fwrite(file, sizeof(char), 61440, fp);
+	fclose(fp);
+	//return buffer;
+
+
+}
+
+void IMGconvertFILE(char* img,char* file)
+{
+	//DOSå¤´
+	//PIMAGE_DOS_HEADER pDosHeader = NULL;
+	////NTå¤´
+	//PIMAGE_NT_HEADERS pNTHeader = NULL;
+	////æ ‡å‡†PEå¤´
+	//PIMAGE_FILE_HEADER pPEHeader = NULL;
+	////å¯é€‰PEå¤´
+	//PIMAGE_OPTIONAL_HEADER32 pOptionHeader = NULL;
+	////èŠ‚è¡¨
+	//PIMAGE_SECTION_HEADER pSectionHeader = NULL;
+	////èŠ‚çš„åæ ‡
+	//int pSectionH[5];
+
+
+	//å…ˆä»imgå¼€å§‹ï¼ŒæŠŠpeå¤´éƒ¨åˆ†å‡æ‰ï¼Œåœ¨èŠ‚é‡Œé¢æ‰¾æ•°æ®  
+	PIMAGE_SECTION_HEADER imgjie = (PIMAGE_SECTION_HEADER)pSectionH[0];
+	unsigned int imgdata1 = ((unsigned int)img + imgjie->VirtualAddress +10) - (unsigned int)img;//è·ç¦»å¤´çš„ä½ç½®
+	unsigned int jie1;
+	for (int i = 0; i < pPEHeader->NumberOfSections;i++)
+	{
+		imgjie = (PIMAGE_SECTION_HEADER)pSectionH[i];
+		if (imgdata1 >= imgjie->VirtualAddress && imgdata1 <= imgjie->VirtualAddress + imgjie->Misc.VirtualSize)
 		{
-			printf("File open failed.\n");
-			exit(1);
+			jie1 = imgdata1 - imgjie->VirtualAddress;
+			break;
 		}
-		fseek(fp, 0L, SEEK_SET);
-		fwrite(file,sizeof(char), 61440, fp);
-		fclose(fp);
-		//return buffer;
+	}
+
+	PIMAGE_SECTION_HEADER filejie = (PIMAGE_SECTION_HEADER)pSectionH[0];
+	unsigned int fike1;
+	unsigned int filedata1 = ((unsigned int)file + filejie->PointerToRawData + 10) - (unsigned int)file;//è·ç¦»å¤´çš„ä½ç½®
+	//unsigned int filedata1;
+	for (int i = 0; i < pPEHeader->NumberOfSections; i++)
+	{
+		filejie = (PIMAGE_SECTION_HEADER)pSectionH[i];
+		if (filedata1 >= filejie->PointerToRawData && filedata1 <= filejie->PointerToRawData + filejie->SizeOfRawData)
+		{
+			fike1 = *((char*) ((int)file + filejie->PointerToRawData + jie1));
+			printf("\nfileé‡Œé¢çš„æ•°æ® = %d \n", fike1);
+			break;
+		}
+	}
 	
+	
+	
+
+	//img+èŠ‚é‡Œé¢æŸä¸ªæ•°æ® å‡è®¾img=1000ï¼ŒèŠ‚é‡Œé¢æ•°æ®åœ¨1500ï¼Œ1500-1000=500ï¼Œ
 
 }
 
@@ -273,9 +325,9 @@ int main()
 	char* rfile = read();
 	char* readFile = PrintNTHeaders(rfile);
 	char* imgFile = ImageBuffer(&readFile);
-	char* NewBFile = NewBuffer(imgFile,readFile);
+	char* NewBFile = NewBuffer(imgFile, readFile);
 	cunpan(NewBFile);
-	
+	IMGconvertFILE(imgFile, readFile);
 
 	free(readFile);
 	free(imgFile);
